@@ -1,0 +1,118 @@
+# Android 8.1 定制构建系统配置
+
+android:
+  # Android 版本配置
+  version: "8.1.0"
+  api_level: 27
+  build_id: "OPM7.181205.001"
+  
+  # AOSP 源码配置
+  aosp:
+    source_dir: "/opt/android/source"
+    build_dir: "/opt/android/build"
+    repo_url: "https://android.googlesource.com/platform/manifest"
+    branch: "android-8.1.0_r81"
+    
+  # 构建工具配置
+  tools:
+    java_home: "/usr/lib/jvm/java-8-openjdk-amd64"
+    python_version: "2.7"
+    make_jobs: 8
+    
+  # 设备配置
+  devices:
+    - name: "generic"
+      codename: "aosp_arm64"
+      architecture: "arm64"
+      
+    - name: "emulator"
+      codename: "aosp_x86_64"
+      architecture: "x86_64"
+
+# 逆向工程配置
+reverse:
+  # 工具路径配置
+  tools:
+    apktool: "/opt/android-tools/apktool_2.9.3.jar"
+    dex2jar: "/opt/android-tools/dex2jar"
+    jadx: "/opt/android-tools/jadx"
+    smali: "/opt/android-tools/smali.jar"
+    baksmali: "/opt/android-tools/baksmali.jar"
+    
+  # 工作目录
+  workspace:
+    input: "/workspace/android-reverse/input"
+    output: "/workspace/android-reverse/output"
+    temp: "/workspace/android-reverse/temp"
+    
+  # 分析配置
+  analysis:
+    decompile_resources: true
+    decompile_sources: true
+    extract_manifest: true
+    extract_assets: true
+
+# ADB 和设备管理配置
+device:
+  # ADB 配置
+  adb:
+    path: "/opt/android-sdk/platform-tools/adb"
+    port: 5555
+    timeout: 30
+    
+  # Fastboot 配置
+  fastboot:
+    path: "/opt/android-sdk/platform-tools/fastboot"
+    timeout: 60
+    
+  # 设备连接配置
+  connection:
+    max_retries: 3
+    retry_delay: 5
+
+# 构建配置
+build:
+  # 预构建配置
+  prebuild:
+    clean: true
+    sync_source: true
+    
+  # 构建选项
+  options:
+    use_ccache: true
+    ccache_size: "50G"
+    build_variant: "userdebug"
+    
+  # 输出配置
+  output:
+    dir: "/workspace/android-build/output"
+    keep_symbols: true
+    generate_ota: true
+
+# ROM 定制配置
+customization:
+  # 系统应用
+  system_apps:
+    remove: []  # 要移除的系统应用
+    add: []     # 要添加的系统应用
+    
+  # 框架修改
+  framework:
+    patches: []  # 要应用的补丁
+    
+  # 启动动画
+  bootanimation:
+    custom: false
+    path: ""
+    
+  # 编译选项
+  compile:
+    optimize: true
+    strip_debug: false
+
+# 日志配置
+logger:
+  level: "info"
+  output: "/workspace/logs/android-build.log"
+  max_size: 100  # MB
+  max_backups: 5
